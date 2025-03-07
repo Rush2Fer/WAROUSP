@@ -1,0 +1,169 @@
+# ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ 
+#                    Configuration de WAROUSP AntiCheat  
+#                        By Rush2Fer (@arthur1337)                                   
+#	                         Version 1.4                 
+# ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ 
+
+# ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ Info Configuration ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ 
+
+
+
+# VARIABLES IN THE CONFIG:
+    # {NAME} = AntiCheat NAME
+    # {USERNAME} = Name of player 
+    # {HACK} = Reason of Detection 
+    # {PACKET} = Amount of Packets sent
+
+# WAROUSP's version, auto update 
+# Do not edit this ! 
+version: '1.4'
+# /!\ This option is not available for now, a Special version of WAROUSP will be released soon for BungeeCord Servers.
+# Enable if you have a BungeeCord server, and you want to send      Alerts and broadcast message  to all bungeecord players
+# Default: false      Usage:   <true|false> 
+BungeeCord: false 
+
+# ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ Chat Configuration ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ 
+Chat_Config:
+  broadcast_message:
+    # Enable Broadcast when WAROUSP ban/kick player ?
+    enabled: true
+    # Broadcast message will be send to all players
+    message: '{NAME} &7{USERNAME}&f a été kick pour &c&l{HACK} &9[{PACKET}]'
+ 
+
+# ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ General Configuration ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬  
+General_Config:
+  # AntiCheat Name (Only for Staff)
+  # Default: '&8[&cWAROUSP&8]'      Usage:   'Text'
+  AntiCheat_Name: '&7[&cWAROUSP&7]'
+  
+  # Your Website
+  # The WebSite will be displayed on kick message
+  Website: 'www.your-server.com'
+  # If you want that OpPlayer got banned if cheat detected (set to true if you want test the anticheat as operator)
+  # Default: false      Usage:   <true|false>
+  OpPlayerCanBeBanned: true
+
+  # Player has specified permission will see alerts in chat
+  # Default: true
+  SeeAlerts: true    
+  
+  # [NEW]  Now, you can make crash the client [ONLY SUPPORTED ON 1.8.X Servers]
+  # The client will crash when cmd is executed, he will need to restart his game.
+  # Default: false      Usage:   <true|false>
+  crash_on_CMD: false
+  
+  # Execute the command configured in cheats part.
+  # Default: true 
+  Cmd_After__Alerts: true
+  
+  # Min CPS for WAROUSP detection. (If TPS < 19 WAROUSP will be detected as Server Lag.)
+  TPS: 18.3
+  
+  # Max Player's ping for detection (If Ping < 400  WAROUSP will be detected as Client Lag.)
+  Ping: 400
+  
+  # AutoClear Logs remove logs after x time, you can 
+  AutoClearLogs:
+    # If you want auto clear of logs
+    enabled: true
+    # After how long the logs should be deleted? (In days) Ex: 7
+    delay: 7   
+    
+    
+    
+  # Join Message will be send to players on join.
+  # Avert the cheaters      Usage:   'Text'           #This message need to contain "AntiCheat" and "Rush2Fer", or anticheat will not work 
+  Join_Message: 'Welcome {USERNAME} , WAROUSP can see you o_O! |  &6AntiCheat By Rush2Fer'
+    
+  # Text will be displayed when alert Staff.     {NAME} = AntiCheat_Name , {USERNAME} = Cheater , {HACK} = hack WAROUSP detected
+  # Default: '{NAME} &f{USERNAME} &csuspected of &6{HACK}'      Usage:   'Text'
+  Staff_Alert_Format: '{NAME} &7&o>> &f&l{USERNAME} &csuspecté de &6&l{HACK} &7(Info)'    
+  
+  # This will show additional information when you hover your mouse over the message
+  # {PING} = player ping / {TPS} = tps / {PACKET} = PakcetsSend / {CPS} = Clicks/s
+  
+  # The 1st -> Cheat Detected
+  Sub_Alert_Format1: '&2&l✓ &r&2Cheat Confirmed &e[Ping: {PING}, TPS: {TPS}, Pckts: {PACKET}]'
+  # The 2nd -> Server Lag
+  Sub_Alert_Format2: '&4&l✘ &r&4Server Lag &e[Ping: {PING}, TPS: {TPS}, Pckts: {PACKET}]'
+  # The 3rd -> Client Lag
+  Sub_Alert_Format3: '&c&l✘ &r&cClient Lag &e[Ping: {PING}, TPS: {TPS}, Pckts: {PACKET}]'
+  
+  # This is option added, if alert is autoclick -> indication about clicks/s
+  # %{_info}% = clicks/s  [NEXT UPDATE]
+  Sub_Alert_CPS: '&7(CPS: &6{CPS} &7)' 
+ 
+# ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ Permissions ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬  
+Permissions:
+  # Admin Permission of WAROUSP, you can execute all WAROUSP command
+  # Default: 'warousp.*'
+  Admin_perm: 'warousp.*'
+  
+  # Alert Permission of WAROUSP, permission needed to see alerts in chat.
+  # Default: 'warousp.alerts'
+  See_Alert: 'warousp.alerts'
+  
+  # WAROUSP will not check player has this permission.
+  # Default: 'warousp.bypass'
+  Enable_ByPass: false
+  ByPass_Detection: 'warousp.bypass'
+  
+# ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ Cheats Configuration (Informations) ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ 
+  
+# Here is the best part :D , you can configure cmd command, max alerts for cmd, and other options ;D Enjoy !
+
+# For all cheats configs:
+
+# enable=  Enable Hack Detection?      Usage:   <true|false>
+# detections_for_alert=  How many times WAROUSP need to detect that a player is cheating before send an alert?     Usage:   Integer(1,2,3.....10)
+# alert_to_staff= Would you like that WAROUSP send message to all players has the 'warousp.alerts' permission [Default permission] ?       Usage:   <true|false>
+
+
+# use_cmd: true=  Do something if amount of alerts have rearched the 'alerts_for_cmd' config.       Usage:   <true|false>
+# alerts_for_cmd= Alerts needed to execute the 'cmd' option (Command).      Usage:   Integer(1,2,3.....10)
+# cmd=   Command will be executed if 'use_cmd' option is true and if player's alerts  >=  alerts_for_cmd
+
+# maxcps= Max clicks per seconds allowed on the server.
+
+# ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ Cheats Configuration ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ 
+
+
+#BETA VERSION: Partie non Configurable.
+
+Config_Hacks:
+  
+  # /!\ -> Partie non disponible/Désactivée. [Prochaine MaJ]
+  # NEXT_UPDATE :D
+  
+  
+  # FlightHacks = Flight + Spider + Jetpack + Other Flight hacks.
+  FlightHacks:
+
+  # ForceField is a combat hack and WAROUSP can detect it. You will see a player that have a ForceField/Aimbot hack do suspicious movements.
+  ForceField:
+    
+  # Regen is a combat hack that regen your health instantly.  
+  Regen_Hack:
+   
+   # (Fly, Phase, Blink, NoFall, Timer, FastBow, FastEat and Regen) .
+  Bad_Packets:
+    
+  # With NoFall, you don't get fall damage, WAROUSP detect this hack and inflige damages that player doesn't receive.
+
+  # AutoClick is program that allow you to click faster.
+  AutoClick_Check:
+
+  # Jesus is a movement hack, you can walk on water.
+  # Fast Detection of this hack :D ~ Instant
+  Jesus_Hack:
+  
+ # With FastBow, you can spam arrows with bow.
+  FastBow_2:
+
+# ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ End Configuration ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ 
+#
+#                                                                           Thanks for using WAROUSP !
+#
+#                                                                             AntiCheat By Rush2Fer
+# ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ ................. ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬

@@ -1,0 +1,7 @@
+To install BUNGEECORD version of WAROUSP:
+
+Put content of folder "BUNGEE VERSION X.X" to "plugins/Skript/scripts"
+Reload the script API-WAROUSP, and execute command
+"/warousp rl"
+
+/!\  You must have SkellettProxy option enabled in Skellett and SkellettProxy installed correctly ! 

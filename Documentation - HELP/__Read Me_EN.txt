@@ -1,0 +1,19 @@
+Thank you for downloading WAROUSP Anti Cheat, by Rush2Fer
+---------------------------------
+Requiered:
+	- Minecraft Server 1.8+
+	- Java 8
+	- Skript 2.2+ (Plugin)
+	- Skellett (Skript Addon)
+	- SkQuery (Skript Addon)
+	- SkRayFall (Skript Addon)
+	- WildSkript (Skript Addon)
+	- Citizens (Skript Addon) [Optionnal] -> If you want FAKE PLAYERS
+Installation:
+
+Read 'Installation' file and follow instructions.
+-------------------------------------------------
+
+AntiCheat By Rush2Fer
+
+Version [BETA] 1.0 [5/19/17]

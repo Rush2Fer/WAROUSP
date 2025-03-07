@@ -1,0 +1,13 @@
+0) Comme vous êtes Français :p la première chose à faire va être de régler l'heure de Skript, pour ceci,
+éditez le fichier 'plugins/Skript/config.sk' et modifiez la valeur "date format" à "dd/MM/yyyy HH:mm"
+0.2) Redémarez votre serveur pour actualiser cette config.
+
+1) Extraire et glisser le contenu du dossier 'WAROUSP [FR] x.x'  dans le dossier 'scripts' (plugins/Skript/scripts/)
+2) Reload le script (/sk reload API-WAROUSP)
+3) Faire la commande '/warousp reload'
+4) Ouvrir la licence WAROUSP (plugins/Skript/script/warousp-licence.yml)
+5) Lisez-la et modifier le fichier (Valeur: 'Agree_Terms_And_Conditions' -> 'I ACCEPT')
+6) Re-faire la commande '/warousp reload'
+7) Bravo! WAROUSP is maintenant installé.
+
+8) Vous pouvez modifier la configuration avec le fichier 'warousp-config'. (plugins/Skript/script/warousp-config.yml)

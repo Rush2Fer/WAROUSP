@@ -1,0 +1,81 @@
+function FakePercent(null: int=0):
+	broadcast "&a %random integer between 2 and 3%%random integer between 0 and 9% %%..."
+	wait 2 ticks
+	broadcast "&a %random integer between 5 and 6%%random integer between 0 and 9% %%..."
+	wait 2 ticks
+	broadcast "&a %random integer between 7 and 8%%random integer between 0 and 9% %%..."
+	wait 2 ticks
+	broadcast "&a 9%random integer between 0 and 9% %%..."
+	wait 2 ticks
+	broadcast "&a 100 %%"
+function WarouspReload(code: integer) :: integer:
+	# ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ Verificatiion ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ 
+	broadcast "&e Chargement... "
+	broadcast " &e..."	
+	wait 1.5 second
+	set {_accept_licence} to yaml value "Agree_Terms_And_Conditions" from "warousp-licence.yml"
+	if "%{_accept_licence}%" is "I ACCEPT":
+		broadcast "&e Reloading WAROUSP..."
+	else:
+		broadcast "&7Avant d'utiliser WAROUSP,merci d'accepter les &c&oTermes and Conditions &f(Voir &a""plugins/Skript/scripts/warousp-licence.yml"" &f)"
+		broadcast "&6>> &f'&7%{_accept_licence}%&f'"
+		stop
+	{_code} is 123
+	wait 2 ticks
+	set {config.warousp.[GEN].Join_Message} to yaml value "General_Config.Join_Message" from "warousp-config.yml"
+	if "%{config.warousp.[GEN].Join_Message}%" contains "Anti", "Cheat" and "Rush2Fer":
+		set {Verified.licence} to 1 
+	else:
+		set {Verified.licence} to 0
+		do [broadcast "&9WAROUSP > Join message &nMUST&r contain &7&o""AntiCheat"" and ""Rush2Fer"""]->[broadcast "&7>> Defined message: &f%colored {config.warousp.[GEN].Join_Message}%"]->[broadcast "(Please edit config file !)"]->[stop]
+	# ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ Info Configuration ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ 
+	FakePercent()
+	wait 10 ticks
+	set {config.warousp.[INFO].version} to yaml value "version" from "warousp-config.yml"
+	set {_ver} to text from url "http://pastebin.com/raw/b7vQVUCB"
+	if "%{_ver}%" is not "%{config.warousp.[INFO].version}%":
+		do [broadcast "&7A new version of &cWAROUSP &7is available. &8(Version %{_ver}%)"]->[broadcast "&e..."]
+	# 	BungeeCord for Next UPDATE
+	set {config.warousp.[INFO].bungee} to yaml value "BungeeCord" from "warousp-config.yml"
+	# ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ Chat Configuration ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ 
+	do [set {config.warousp.[CHAT].broadc-status} to yaml value "Chat_Config.broadcast_message.enabled" from "warousp-config.yml"]->[set {config.warousp.[CHAT].broadc-message} to yaml value "Chat_Config.broadcast_message.message" from "warousp-config.yml"]
+	# ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ General Configuration ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬  
+	do [set {config.warousp.[GEN].name} to yaml value "General_Config.AntiCheat_Name" from "warousp-config.yml"]->[set {config.warousp.[GEN].Website} to yaml value "General_Config.Website" from "warousp-config.yml"]->[set {config.warousp.[GEN].OpBan} to yaml value "General_Config.OpPlayerCanBeBanned" from "warousp-config.yml"]->[set {config.warousp.[GEN].SeeAlerts} to yaml value "General_Config.SeeAlerts" from "warousp-config.yml"]->[set {config.warousp.[GEN].CrashPlayer} to yaml value "General_Config.crash_on_CMD" from "warousp-config.yml"]->[set {config.warousp.[GEN].Cmd-Status.Alerts} to yaml value "General_Config.Cmd_After__Alerts" from "warousp-config.yml"]->[set {config.warousp.[GEN].Format.Alerts} to yaml value "General_Config.Staff_Alert_Format" from "warousp-config.yml"]->[set {config.warousp.[GEN].MinTPSDetect} to yaml value "General_Config.TPS" from "warousp-config.yml"]->[set {config.warousp.[GEN].MaxPing} to yaml value "General_Config.Ping" from "warousp-config.yml"]->[set {config.warousp.[GEN].AutoClearStatus} to yaml value "General_Config.AutoClearLogs.enabled" from "warousp-config.yml"]->[set {config.warousp.[GEN].AutoClearDelay} to yaml value "General_Config.AutoClearLogs.delay" from "warousp-config.yml"]->	[set {config.warousp.[GEN].Format.Sub1} to yaml value "General_Config.Sub_Alert_Format1" from "warousp-config.yml"]->[set {config.warousp.[GEN].Format.Sub2} to yaml value "General_Config.Sub_Alert_Format2" from "warousp-config.yml"]->[set {config.warousp.[GEN].Format.Sub3} to yaml value "General_Config.Sub_Alert_Format3" from "warousp-config.yml"]->[set {config.warousp.[GEN].Format.Sub-CPS} to yaml value "General_Config.Sub_Alert_CPS" from "warousp-config.yml"]
+	# ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ Permissions ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬  
+	do [set {config.warousp.[PERM].AdminPerm} to yaml value "Permissions.Admin_perm" from "warousp-config.yml"]->[set {config.warousp.[PERM].AlertsPerm} to yaml value "Permissions.See_Alert" from "warousp-config.yml"]->[set {config.warousp.[PERM].ByPassEnable} to yaml value "Permissions.Enable_ByPass" from "warousp-config.yml"]->[set {config.warousp.[PERM].ByPassPerm} to yaml value "Permissions.ByPass_Detection" from "warousp-config.yml"]
+	# ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ Cheats Configuration(Désactivé) ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ 
+	 # Disponible dans la prochaine MaJ
+	# ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ Settings Verification ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬  
+	broadcast "&aSuccesful Loading &fWAROUSP &a Version : &c%{config.warousp.[INFO].version}% "
+	make console execute command "/sk reload WAROUSP"
+function WAROUSPCLEAR(p: player):
+	loop 12 times:
+		send "" to {_p}	
+command /WAROUSP [<text>] [<text>]:
+	trigger:
+		if arg-1 is not set:
+			make player execute command "/WAROUSP help"
+		else if arg-1 is "help", "h" or "aide":
+			arg-2 is not set:
+				do [WAROUSPCLEAR(player)]->[send "&7▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"]->[send "   &f/warousp help      &r&9Informations About &nWAROUSP"]->[send "   &f/warousp Info &l<Player>      &r&9View detections of WAROUSP for specified player."]->[send "   &f/warousp (ver|version) [check|update]     &r&9Verify or Update WAROUSP's version."]->[send "&9WAROUSP&7 &f| &aVersion %{config.warousp.[INFO].version}% &f| &cBy Rush2Fer"]->[send "&7▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"]
+		else if arg-1 is "Info", "I", "Information", "Informations", "Alerts" or "Alert":
+			arg-2 is set:
+				do [set {_arg2} to "%arg-2%" parsed as player]->[WAROUSPCLEAR(player)]->[send "&7» &9Cette fonctionnalité n'est pas disponible actuellement."]  #Next Update :'(	
+			else:
+				do [WAROUSPCLEAR(player)]->[send "   &f/warousp Info &l<Player>      &r&9Merci de spécifier un joueur."]
+		else if arg-1 is "v", "ver", "version" or "versions":
+			arg-2 is "check":
+				WAROUSPCLEAR(player)
+				send "&7» &9Ce serveur utilise actuellement &eWAROUSP v%{config.warousp.[INFO].version}%"
+				set {_ver} to text from url "http://pastebin.com/raw/b7vQVUCB"
+				if "%{_ver}%" is not "%{config.warousp.[INFO].version}%":
+					send "&7A new version of &cWAROUSP &7is available. &8(Version %{_ver}%)"
+				else:
+					do [WAROUSPCLEAR(player)]->[send "&7» &9You are already using the latest version of &nWAROUSP."]
+			else:
+				do [WAROUSPCLEAR(player)]->[send "   &f/warousp (ver|version) [check|update]     &r&9Verify or Update WAROUSP's version."]
+		else if arg-1 is "rl" or "reload":
+			WarouspReload(123)
+		else:	
+			WAROUSPCLEAR(player)
+			do [send "%arg-1% - %arg-2%"]->[send "&7» &9Commande Introuvable, &f/warousp help"]

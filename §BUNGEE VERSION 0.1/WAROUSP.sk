@@ -1,0 +1,323 @@
+options:
+	name: %colored {config.warousp.[GEN].name}% # AntiCheat Name
+	timejoin: 7 seconds # [] Time before WAROUSP kick player. []
+	kick_message: "&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬%nl% %nl%&7[&cWAROUSP&7]%nl%&fKicked. %nl% &aReason: &4&l(Cheat)%nl% &9Suspected &f%{_hack}% %nl% &5Error? Contact us!%nl% &7%colored {config.warousp.[GEN].Website}% %nl% %nl%&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"		
+ # Var Converter > YML	
+function VariableConverter(t: text, reason: text, p: player, packets: int=0, cps: int=0) :: text:
+	do [replace all "{PING}" in {_t} with "%{_p}'s ping%"]->[replace all "{TPS}" in {_t} with "%tps%"]->[replace all "{CPS}" in {_t} with "%{_cps}%"]->[replace all "{PACKET}" in {_t} with "%{_packets}%"]->[set {_name} to {config.warousp.[GEN].name}]->[replace all "{NAME}" in {_t} with "%colored {_name}%"]->[replace all "{HACK}" in {_m} with "%{_reason}%"]
+	return {_t}
+# ----------------------------------------
+# WAROUSP LOADING
+on load:
+	if {Verified.licence} is 0:
+		do [broadcast "Please Reload Skript &6(/warousp reload)"]->[broadcast "&cDisabled WAROUSP"]->[make console execute command "/sk disable %script%"]->[stop]
+	{SkinsList::*} is not set
+	broadcast "&9WAROUSP> &7[BOT] &eBots Loading"
+	loop 200 times:
+		add "Player%loop-number%" to {SkinsList::*}
+		wait 0.5 tick
+	broadcast "&9WAROUSP> &7[BOT] &eSkins Loaded"
+on unload:
+	clear {SkinsList::*}
+	broadcast "&9WAROUSP> &7[BOT] &eBots Disabled"
+# WAROUSP AUTO DELETE FILES
+function TempFile(null: int=0):
+	if {config.warousp.[GEN].AutoClearStatus} is true or "true":
+		do [set {_cnt} to 0]->[set {_remove} to "%{config.warousp.[GEN].AutoClearDelay}% days" parsed as timespan]
+		loop {temp.files::*}:
+			if difference between {creation.file.%loop-value%} and now is greater than {_remove}:
+				do [delete file "plugins/WAROUSP/logs/%loop-value%.txt"]->[set {_date::*} to loop-value split at "."]->[remove loop-value from {temp.files::*}]->[clear {creation.file.%loop-value%}]->[add 1 to {_cnt}]->[broadcast "{@name} &eAntiCheat's Logs from &7%{_date::1}%/%{_date::2}%/%{_date::3}% &edeleted"]
+		broadcast "{@name} &8Deleted &c%{_cnt}% &8Log(s)."		
+every 30 minutes:
+	TempFile()
+# ALERTS SYSTEM -------------------------------------------
+function Alerts(p: player, reason: text, info: int=0, cps: int=0):
+	{_p} is online
+	if tps >= 17:
+		if {_p}'s ping >= 800:
+			set {_tooltip} to "%{config.warousp.[GEN].Format.Sub3}% %{config.warousp.[GEN].Format.Sub-CPS}%"
+		else if {_p}'s ping = 0:
+			set {_tooltip} to "%{config.warousp.[GEN].Format.Sub2}% %{config.warousp.[GEN].Format.Sub-CPS}%"
+		else if {_p}'s ping < 800:	
+			set {_tooltip} to "%{config.warousp.[GEN].Format.Sub1}% %{config.warousp.[GEN].Format.Sub-CPS}%"
+	else:
+		set {_tooltip} to "%{config.warousp.[GEN].Format.Sub2}% %{config.warousp.[GEN].Format.Sub-CPS}%"
+	{config.warousp.[GEN].SeeAlerts} is false or "false":
+		stop
+	set {_m} to {config.warousp.[GEN].Format.Alerts}
+	do [replace all "{PING}" in {_tooltip} with "%{_p}'s ping%"]->[replace all "{TPS}" in {_tooltip} with "%tps%"]->[replace all "{CPS}" in {_tooltip} with "%{_cps}%"]->[replace all "{PACKET}" in {_tooltip} with "%{_info}%"]->[set {_name} to {config.warousp.[GEN].name}]->[replace all "{NAME}" in {_m} with "%colored {_name}%"]->[replace all "{USERNAME}" in {_m} with "%{_p}%"]->[replace all "{HACK}" in {_m} with "%{_reason}%"]
+	loop all players:
+		loop-player has permission "%{config.warousp.[PERM].AlertsPerm}%"
+		make console execute command "/tellraw %loop-player% {""text"":""%colored {_m}%"",""hoverEvent"":{""action"":""show_text"",""value"":""%colored {_tooltip}%""}}"
+	do [set {_blocks} to "[BLOCKS]: "]->[set {_ping} to " [PING HISTORY]: "]->[set {_tps} to " [TPS HISTORY]: "]
+	#BLOCKS AND PING INFOS
+	loop blocks within (block 2 up 1 east 1 north of {_p}) to (block 2 down 1 west 1 south of {_p}):
+		set {_blocks} to join {_blocks} and "%loop-block%" using "•"
+	loop {PING.%{_p}%::*}:
+		if "%loop-index%" is "1":
+			set {_ping} to join {_ping} and "%loop-value%"
+		else:
+			set {_ping} to join {_ping} and "%loop-value%" using ", "	
+	loop {Server.TPS::*}:
+		if "%loop-index%" is "1":
+			set {_tps} to join {_tps} and "%loop-value%"
+		else:
+			set {_tps} to join {_tps} and "%loop-value%" using ", "			
+	do [set {_now} to "%now%"]->[set {_tp1::*} to {_now} split at " "]->[set {_dsp1::*} to {_tp1::1} split at "/"]->[set {_dsp2::*} to {_tp1::2} split at ":"]->[send " " to {_p}]->[send "&e&l→&r&eCheating on &l%{_dsp1::1}%/%{_dsp1::2}%/%{_dsp1::3}% à %{_dsp2::1}%:%{_dsp2::2}%" to {_p}]->[send "&8• &7&n(Hack Dectected.)" to {_p}]->[send "&9>> &7Suspected &c&l%{_reason}% &r." to {_p}]->[send "&8▬▬▬▬▬▬▬▬▬▬▬▬&7▬▬▬▬▬▬▬▬&f▬▬▬▬▬▬&7▬▬▬▬▬▬▬▬&8▬▬▬▬▬▬▬▬▬▬▬▬" to {_p}]
+	if file "plugins/WAROUSP/logs/%{_dsp1::1}%.%{_dsp1::2}%.%{_dsp1::3}%.txt" doesn't exists:
+		do [create file "plugins/WAROUSP/logs/%{_dsp1::1}%.%{_dsp1::2}%.%{_dsp1::3}%.txt"]->[set {_filename} to "%{_dsp1::1}%.%{_dsp1::2}%.%{_dsp1::3}%"]->[add {_filename} to {temp.files::*}]->[set {creation.file.%{_filename}%} to now]
+	wait 2 ticks
+	if {_info} is not 0:
+		wf "[%{_dsp1::1}%/%{_dsp1::2}%/%{_dsp1::3}% | %{_dsp2::1}%:%{_dsp2::2}%] %{_p}% suspected %{_reason}% [Detected by WAROUSP] [PacketsSend: %{_info}%]  %{_blocks}% %{_ping}% %{_tps}%" to "plugins/WAROUSP/logs/%{_dsp1::1}%.%{_dsp1::2}%.%{_dsp1::3}%.txt"
+	else:
+		wf "[%{_dsp1::1}%/%{_dsp1::2}%/%{_dsp1::3}% | %{_dsp2::1}%:%{_dsp2::2}%] %{_p}% suspected %{_reason}% [Detected by WAROUSP] %{_blocks}% %{_ping}% %{_tps}%" to "plugins/WAROUSP/logs/%{_dsp1::1}%.%{_dsp1::2}%.%{_dsp1::3}%.txt"
+	do [play resource sound pack "mob.wither.idle" to {_p}]->[play resource sound pack "mob.zombie.metal" to {_p}]
+# WAROUSP ANIMATION	
+function AnimeBan(p: player, hack: text, sendpacket: text="0"):
+	if {BANANIMATION.%{_p}%} is not set:
+		if {config.warousp.[PERM].ByPassEnable} is true or "true":
+			{_p} has permission "%{config.warousp.[PERM].ByPassPerm}%"
+			stop
+		if {config.warousp.[GEN].OpBan} is false or "false":
+			if {_p} is op:
+				stop
+		{_p} is online
+		{_p}'s gamemode is survival or adventure
+		loop {Server.TPS::*}:
+			if loop-value < {config.warousp.[GEN].MinTPSDetect}:
+				stop
+		loop {PING.%{_p}%::*}:
+			if loop-value > {config.warousp.[GEN].MaxPing}:
+				stop
+		{_p}'s ping is not 0
+		do [set {_int} to "%{_sendpacket}%" parsed as integer]->[Alerts({_p}, "%{_hack}%", {_int})]->[set {BANANIMATION.%{_p}%} to true]->[set {warousp.Alerts::%{_p}%::%{_hack}%} to 0]
+		wait 2 ticks
+		loop 10 times:
+			do [launch ball firework colored white at {_p} timed 0.001]->[launch ball firework colored red at {_p} timed 0.001]
+			wait 1 tick
+		wait 1 seconds
+		if {config.warousp.[GEN].SeeAlerts} is true or "true":
+			loop all players:
+				loop-player has permission "%{config.warousp.[PERM].AlertsPerm}%"
+				play resource sound pack "mob.wither.death" to loop-player
+		if {config.warousp.[CHAT].broadc-status} is true or "true":
+			do [set {_m} to "%colored {config.warousp.[CHAT].broadc-message}%"]->[replace all "{USERNAME}" in {_m} with "%{_p}%"]->[replace all "{NAME}" in {_m} with "{@name}"]->[replace all "{HACK}" in {_m} with "%{_hack}%"]->[replace all "{PACKET}" in {_m} with "%{_sendpacket}%"]
+			loop all bungeecord players:
+				set {_uuid} to bungee uuid of "%loop-value%"
+				message "%colored {_m}%" to bungeecord player "%{_uuid}%"
+		if {config.warousp.[GEN].CrashPlayer} is true or "true":
+			broadcast "&cFunction Disabled&7(CrashPlayer.%{_p}%)"
+		else:
+			kick {_p} due to {@kick_message}
+		set {warousp.Alerts::%{_p}%::%{_hack}%} to 0	
+	else:
+		wait 10 seconds
+		clear {BANANIMATION.%{_p}%}
+on damage:
+	victim is a player
+	damage cause is contact
+	set {damagemoment.%victim%} to now
+ #ANTI FLY Vertical- /!\ Demande beaucoup de ressources. 
+on any move:
+	check [difference between {SERVERJOIN.%event-player%} and now > {@timejoin}]->[player's gamemode is survival or adventure]
+	if ground state of player is true:
+		do [set {FLY.sol.%player%} to y-coord of player]->[set {FLY.SLOC.%player%} to location of player]
+	else:	
+		if block at player is ladder or vines or fence or sign or iron bars or nether fence or fence gate or trapdoor:
+			do [set {FLY.sol.%player%} to y-coord of player]->[set {FLY.SLOC.%player%} to location of player]
+		if (block below player) or (block at player) is water or lava:
+			do [set {FLY.sol.%player%} to y-coord of player]->[set {FLY.SLOC.%player%} to location of player]
+		{FLY.sol.%player%} < y-coord of player
+		if difference between {FLY.sol.%event-player%} and y-coord of player >= 1.3:
+			set {_next} to true
+		if distance between {FLY.SLOC.%event-player%} and location of player >= 10.5:
+			set {_next} to true
+		check [{_next} is true]->[difference between {damagemoment.%event-player%} and now > 2 seconds]->[difference between {TNTmoment.%event-player%} and now >= 8 seconds]->[player is alive]
+		add 1 to {warousp.Alerts::%player%::Fly}
+		do [set {FLY.sol.%player%} to y-coord of player]->[set {FLY.SLOC.%player%} to location of player]
+		if {warousp.Alerts::%player%::Fly} >= 1:
+			Alerts(player, "FlightHack")
+		if {warousp.Alerts::%event-player%::Fly} > 6:
+			{BANANIMATION.%event-player%} is not set
+			AnimeBan(event-player, "Flight Hack")		
+# Anti Jesus -------------------------------------------------------------	
+on packet:
+	event-string is "PacketPlayInPosition"
+	ground state of event-player is false
+	if (block 2 below event-player) or (block below event-player) or (block at event-player) is water or lava:
+		set {JesusPacket.%event-player%} to now
+on walking on water:
+	check [difference between {SERVERJOIN.%event-player%} and now > {@timejoin}]->[difference between {JesusPacket.%player%} and now >= 1.2 seconds]
+	do [set {_s1} to block 1 south 1 west of block below player]->[set {_s2} to block 1 north 1 east of block below player]
+	loop blocks within {_s1} to {_s2}:
+		if loop-block is water or lava:	
+			add 1 to {_total}
+	if {_total} >= 9:
+		AnimeBan(player, "Jesus", "%difference between {JesusPacket.%player%} and now%")
+on damage:
+	attacker is an entity
+	victim is a player
+	set {damagemoment.%victim%} to now
+on damage:
+	damage cause is block explosion or entity explosion
+	victim is a player
+	set {TNTmoment.%victim%} to now	
+
+# Anti Bad Packets -----------------------------------------------
+on packet:
+	check [difference between {SERVERJOIN.%event-player%} and now > {@timejoin}]->[event-string is "PacketPlayInPosition"]
+	#send "&a%x-coord of event-player% %y-coord of event-player% %z-coord of event-player% &b%yaw of event-player% %pitch of event-player%" to event-player
+	if {PlayerPacket.last.%event-player%} is event-player's location:
+		if difference between {LastPacketSend.%event-player%} and now <= 1 second:
+			add 1 to {SendedPackets.%event-player%} 
+		else:
+			#send "{@name}&f [PM]>>&e%{SendedPackets.%event-player%}% &7Packets &a(P: %event-player's ping%&f,&a TPS: %tps%)" to event-player
+			if {SendedPackets.%event-player%} >= 24:
+				AnimeBan(event-player, "Bad Packets", "%{SendedPackets.%event-player%}%")
+			clear {SendedPackets.%event-player%}
+			set {LastPacketSend.%event-player%} to now
+	set {PlayerPacket.last.%event-player%} to event-player's location
+on packet:
+	check [difference between {SERVERJOIN.%player%} and now > {@timejoin}]->[event-string is "PacketPlayInLook"]
+	set {LASTMOVE.%event-player%} to now
+# Anti NoFall/Fly Instant/ Fast Eat / Regen --------------------------------------------
+on packet:
+	check [event-string is "PacketPlayOutUpdateHealth"]->[event-player's gamemode is survival or adventure]
+	set {_food} to packet field "b"
+	if difference between {LASTFOOD1.%event-player%} and now <= 0.2 second:
+		{LASTFOOD2.%event-player%} < {_food}:
+			AnimeBan(event-player, "FastEat", "%{SendedPackets.%event-player%}%")
+	set {LASTFOOD1.%event-player%} to now
+	set {LASTFOOD2.%event-player%} to {_food}
+on packet:
+	check [difference between {SERVERJOIN.%event-player%} and now > {@timejoin}]->[event-string is "PacketPlayInFlying"]->[ground state of event-player is false]
+	if difference between {LastNOFALL.%event-player%} and now <= 1 seconds:
+		difference between {damagemoment.%event-player%} and now > 2 seconds
+		block at event-player is not ladder or vines or barrier
+		add 1 to {NOFALL.%event-player%}
+		#broadcast "&7>> &b%{NOFALL.%event-player%}%"
+		if {NOFALL.%event-player%} >= 9:
+			AnimeBan(event-player, "Bad Packets", "%{NOFALL.%event-player%}%") #>Regen,Fly,Timer,Phase,FastEat,Etc...
+	else:
+		clear {NOFALL.%event-player%} 
+		set {LastNOFALL.%event-player%} to now	
+
+# JOIN 
+# 
+# VAR CLEAR		
+on kick:
+	clear {BANANIMATION.%player%}	
+on join:
+	clear {BANANIMATION.%player%}
+on connect:	
+	clear {BANANIMATION.%player%}
+# WAROUSP - PLAYER
+on join:
+	set {damagemoment.%player%} to now
+	set {TNTmoment.%player%} to now
+	set {SERVERJOIN.%player%} to now
+	wait 5 seconds
+	player is online
+	while ground state of player is false:
+		wait 4 ticks	
+	set {_m} to {config.warousp.[GEN].Join_Message}	
+	replace all "{USERNAME}" in {_m} with "%player%"
+	replace all "{NAME}" in {_m} with "{@name}"
+	replace all "{TPS}" in {_m} with "%tps%"
+	replace all "{PING}" in {_m} with "%player's ping%"
+	send "%colored {_m}%"
+	stop
+on disconnect:
+	clear {NOFALL.%event-player%} 	
+	clear {BANANIMATION.%player%}
+	clear {SendedPackets.%event-player%}
+	clear {NOFALL.%event-player%} 
+on respawn:
+	set {FLY.sol.%player%} to y-coord of player
+	set {FLY.LOC.%player%} to location of player		
+# ALERTS RESET ------------------------------------------------------
+every 15 seconds:
+	set {_general-cheats::*} to "FastEat", "Jesus", "Blink" , "Fly", "AutoClick", "ForceField", "FastBow", "AntiKB" and "NoFall" #
+	loop {_general-cheats::*}:
+		loop all players:
+			if {warousp.Alerts::%loop-value-2%::%loop-value-1%} > 0:
+				reduce {warousp.Alerts::%loop-value-2%::%loop-value-1%} by 1	
+on drop:
+	event-item is head named "&bWAROUSP"
+	cancel event
+	remove all head named "&bWAROUSP" from player
+on connect:
+	remove all head named "&bWAROUSP" from player
+# WAROUSP FAKE PLAYER	
+# 
+
+on damage:
+	attacker is a player
+	{TIME.%attacker%} is not set
+	set {TIME.%attacker%} to now
+	set {Citizen} to "%random letter%%random letter%%random letter%%random letter%%random letter%%random integer between 0 and 9%%random integer between 0 and 9%%random letter%"
+	create a citizen named "%{Citizen}%" at location 2 above attacker's head
+	set {NPC.%attacker%} to last created citizen id
+	hide citizen {NPC.%attacker%} to all players
+	reveal citizen {NPC.%attacker%} to attacker
+	set {_skin} to random element out of {SkinsList::*}
+	set citizen {NPC.%attacker%} max health to 10
+	change citizen {NPC.%attacker%} skin to "%{_skin}%"
+	while difference between {TIME.%attacker%} and now <= 10 seconds:
+		if attacker's pitch is between -55 and 88:
+			reveal citizen {NPC.%attacker%} to attacker
+			set {_u} to location 2 behind location of attacker
+			add 3.5 to y-coord of {_u}
+			teleport citizen {NPC.%attacker%} to {_u}
+		else:
+			hide citizen {NPC.%attacker%} to attacker
+		wait 3 ticks	
+	remove citizen {NPC.%attacker%}
+	despawn citizen {NPC.%attacker%}
+	clear {NPC.%attacker%}
+	clear {TIME.%attacker%}
+# FAST BOW - NO PACKET
+on shoot:
+	difference between {SERVERJOIN.%shooter%} and now > {@timejoin}
+	difference between {LASTSHOOT.%shooter%} and now <= 1 tick:
+		cancel event
+		add 1 to {warousp.Alerts::%shooter%::FastBow}
+		if {warousp.Alerts::%shooter%::FastBow} > 5:
+			AnimeBan(shooter, "FastBow", "%{warousp.Alerts::%shooter%::FastBow}%")
+			set {warousp.Alerts::%shooter%::FastBow} to 0
+	set {LASTSHOOT.%shooter%} to now
+command /ping:
+	trigger:
+		set {_p} to "&b[PING HISTORY] &d"
+		loop {PING.%player%::*}:
+			if "%loop-index%" is "1":
+				set {_p} to join {_p} and "%loop-value%"
+			else:
+				set {_p} to join {_p} and "%loop-value%" using ", "
+		send "&d%{_p}%"
+		send "&bActual: &d%player's ping%"
+command /tps:2:
+	trigger:
+		set {_p} to "&b[TPS HISTORY] &d"
+		loop {Server.TPS::*}:
+			if "%loop-index%" is "1":
+				set {_p} to join {_p} and "%loop-value%"
+			else:
+				set {_p} to join {_p} and "%loop-value%" using ", "
+		send "&d%{_p}%"
+		send "&bActual: &d%tps%"
+
+#PING History
+every seconds:
+	loop all players:
+		loop 7 times:
+			if {PING.%loop-player%::%loop-number + 1%} is set:
+				set {PING.%loop-player%::%loop-number%} to {PING.%loop-player%::%loop-number + 1%}
+		set {PING.%loop-player%::7} to loop-player's ping
+# TPS History		
+every seconds:
+	loop all players:
+		loop 7 times:
+			if {Server.TPS::%loop-number + 1%} is set:
+				set {Server.TPS::%loop-number%} to {Server.TPS::%loop-number + 1%}
+		set {Server.TPS::7} to tps
